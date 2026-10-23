@@ -1,0 +1,474 @@
+{% extends "base.html" %} {% block title %}AT-RISK | Dashboard{% endblock %} {%
+block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+{% endblock %} {% block content %}
+<section class="power-dashboard dashboard-v3">
+  <div class="dashboard-topline">
+    <div>
+      <span class="eyebrow"
+        ><span class="status-dot"></span> Executive analytics</span
+      >
+      <h1>Operations dashboard</h1>
+      <p>
+        See every feedback entry, understand review progress and arrange the
+        views your team needs.
+      </p>
+    </div>
+    <div class="dashboard-actions">
+      <button class="btn btn-secondary" id="resetDashboard">
+        <i class="fa-solid fa-rotate-left"></i> Reset filters</button
+      ><button class="btn btn-secondary" id="resetChartLayout">
+        <i class="fa-solid fa-table-cells-large"></i> Reset charts</button
+      ><button class="btn" onclick="window.print()">
+        <i class="fa-solid fa-download"></i> Export view
+      </button>
+    </div>
+  </div>
+
+  <div class="dashboard-slicers panel">
+    <div class="slicer-title">
+      <i class="fa-solid fa-sliders"></i>
+      <div>
+        <strong>Dashboard filters</strong
+        ><small>Every card and chart responds to these filters.</small>
+      </div>
+    </div>
+    <label
+      >Risk<select id="riskSlicer">
+        <option value="all">All risk levels</option>
+        <option>High</option>
+        <option>Medium</option>
+        <option>Low</option>
+      </select></label
+    ><label
+      >Review status<select id="statusSlicer">
+        <option value="all">All statuses</option>
+        <option value="submitted">Pending review</option>
+        <option value="predicted">Reviewed</option>
+        <option value="not_applicable">Not applicable</option>
+      </select></label
+    ><label
+      >Disability<select id="disabilitySlicer">
+        <option value="all">All disability types</option>
+        {% for value in
+        records|map(attribute='disability_type')|select|unique|sort %}
+        <option value="{{ value }}">{{ value|replace('_', ' ')|title }}</option>
+        {% endfor %}
+      </select></label
+    ><label
+      >Setting<select id="settingSlicer">
+        <option value="all">All settings</option>
+        {% for value in records|map(attribute='setting')|select|unique|sort %}
+        <option value="{{ value }}">{{ value|replace('_', ' ')|title }}</option>
+        {% endfor %}
+      </select></label
+    >
+  </div>
+
+  <div class="power-kpis">
+    <button class="power-kpi active" data-kpi="all">
+      <span class="kpi-symbol teal"
+        ><i class="fa-solid fa-layer-group"></i></span
+      ><span
+        ><small>Total feedback</small
+        ><strong id="kpiTotal">{{ stats.total }}</strong
+        ><em>{{ stats.today }} received today</em></span
+      ></button
+    ><button class="power-kpi" data-kpi="High">
+      <span class="kpi-symbol red"
+        ><i class="fa-solid fa-triangle-exclamation"></i></span
+      ><span
+        ><small>High risk</small><strong id="kpiHigh">{{ stats.high }}</strong
+        ><em>Priority follow-up</em></span
+      ></button
+    ><button class="power-kpi" data-kpi="Medium">
+      <span class="kpi-symbol amber"
+        ><i class="fa-solid fa-circle-exclamation"></i></span
+      ><span
+        ><small>Medium risk</small
+        ><strong id="kpiMedium">{{ stats.medium }}</strong
+        ><em>Monitor closely</em></span
+      ></button
+    ><button class="power-kpi" data-kpi="Low">
+      <span class="kpi-symbol green"
+        ><i class="fa-solid fa-circle-check"></i></span
+      ><span
+        ><small>Low risk</small><strong id="kpiLow">{{ stats.low }}</strong
+        ><em>Routine follow-up</em></span
+      ></button
+    ><button class="power-kpi" data-kpi="submitted">
+      <span class="kpi-symbol blue"
+        ><i class="fa-solid fa-hourglass-half"></i></span
+      ><span
+        ><small>Pending review</small
+        ><strong id="kpiPending">{{ stats.pending }}</strong
+        ><em>Needs administrator action</em></span
+      ></button
+    ><button class="power-kpi" data-kpi="predicted">
+      <span class="kpi-symbol teal"><i class="fa-solid fa-user-check"></i></span
+      ><span
+        ><small>Reviewed</small
+        ><strong id="kpiReviewed">{{ stats.reviewed }}</strong
+        ><em>Result available</em></span
+      ></button
+    ><button class="power-kpi" data-kpi="users">
+      <span class="kpi-symbol purple"><i class="fa-solid fa-users"></i></span
+      ><span
+        ><small>Registered users</small><strong>{{ stats.users }}</strong
+        ><em>Unique accounts</em></span
+      >
+    </button>
+  </div>
+
+  <div class="processing-overview panel">
+    <div class="processing-heading">
+      <div>
+        <span class="section-kicker">Review queue</span>
+        <h2>Processing status</h2>
+        <p>Know exactly what is waiting and what has already been completed.</p>
+      </div>
+      <a class="btn btn-small" href="{{ url_for('admin_submissions') }}"
+        >Open submissions <i class="fa-solid fa-arrow-right"></i
+      ></a>
+    </div>
+    <div class="processing-status-grid">
+      <div class="processing-status pending-status">
+        <span><i class="fa-solid fa-hourglass-half"></i></span>
+        <div>
+          <strong id="statusPending">{{ stats.pending }}</strong
+          ><b>Pending review</b
+          ><small>Submitted feedback awaiting prediction</small>
+        </div>
+      </div>
+      <div class="processing-status reviewed-status">
+        <span><i class="fa-solid fa-circle-check"></i></span>
+        <div>
+          <strong id="statusReviewed">{{ stats.reviewed }}</strong
+          ><b>Already reviewed</b
+          ><small>Prediction and explanation are available</small>
+        </div>
+      </div>
+      <div class="processing-status na-status">
+        <span><i class="fa-solid fa-circle-minus"></i></span>
+        <div>
+          <strong id="statusNA">{{ stats.not_applicable }}</strong
+          ><b>Not applicable</b
+          ><small>Entries that do not require prediction</small>
+        </div>
+      </div>
+      <div class="processing-bar">
+        <div>
+          <span>Review completion</span><strong id="completionRate">0%</strong>
+        </div>
+        <div class="completion-track"><i id="completionFill"></i></div>
+        <small id="completionText">No feedback has been submitted yet.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-strip">
+    <span><i class="fa-solid fa-lightbulb"></i></span>
+    <div>
+      <strong id="insightTitle">Actionable insight</strong>
+      <p id="insightText">
+        Choose a filter or add a chart to explore your feedback.
+      </p>
+    </div>
+    <a href="{{ url_for('admin_submissions') }}" class="text-link"
+      >Open feedback <i class="fa-solid fa-arrow-right"></i
+    ></a>
+  </div>
+
+  <div class="chart-builder panel">
+    <div class="builder-heading">
+      <div>
+        <span class="section-kicker">Personalise your dashboard</span>
+        <h2>Chart tools</h2>
+        <p>
+          Add a visual, choose its field and drag any card by its handle to
+          rearrange the page. Your layout is saved in this browser.
+        </p>
+      </div>
+      <span class="builder-saved" id="layoutSaved"
+        ><i class="fa-solid fa-cloud-arrow-up"></i> Layout saved</span
+      >
+    </div>
+    <div class="builder-controls">
+      <label
+        >Chart type<select id="builderType">
+          <option value="bar">Bar chart</option>
+          <option value="line">Line chart</option>
+          <option value="pie">Pie chart</option>
+          <option value="doughnut">Doughnut chart</option>
+          <option value="polarArea">Polar area</option>
+          <option value="radar">Radar chart</option>
+        </select></label
+      ><label
+        >Group records by<select id="builderField">
+          <option value="setting">Service setting</option>
+          <option value="disability">Disability type</option>
+          <option value="device">Device requested</option>
+          <option value="risk">Risk band</option>
+          <option value="status">Review status</option>
+          <option value="broken">Device condition</option>
+          <option value="financial">Financial barrier</option>
+          <option value="user_trained">Training received</option>
+        </select></label
+      ><label
+        >Chart title<input
+          id="builderTitle"
+          value="Custom feedback view"
+          maxlength="42" /></label
+      ><button class="btn" id="addChart">
+        <i class="fa-solid fa-plus"></i> Add chart
+      </button>
+    </div>
+    <div class="builder-hint">
+      <i class="fa-solid fa-arrows-up-down-left-right"></i> Drag cards to move
+      them <i class="fa-solid fa-trash-can"></i> Remove any view
+      <i class="fa-solid fa-floppy-disk"></i> Your choices are remembered
+    </div>
+  </div>
+
+  <div class="visual-grid configurable-grid" id="chartGrid">
+    <article
+      class="visual-card visual-wide chart-card"
+      draggable="true"
+      data-chart-id="trendChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Volume over time</span>
+          <h2>Feedback activity</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box">
+        <canvas id="trendChart"></canvas>
+        <div class="chart-empty">No feedback matches the current filters.</div>
+      </div>
+      <p class="chart-axis-note">
+        <b>X-axis:</b> Month received &nbsp; <b>Y-axis:</b> Number of feedback
+        entries
+      </p>
+    </article>
+    <article
+      class="visual-card chart-card"
+      draggable="true"
+      data-chart-id="riskChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Risk composition</span>
+          <h2>Risk distribution</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box chart-donut">
+        <canvas id="riskChart"></canvas>
+        <div class="chart-empty">No reviewed risk results yet.</div>
+      </div>
+      <p class="chart-axis-note">
+        Legend: High, Medium and Low risk among reviewed feedback.
+      </p>
+    </article>
+    <article
+      class="visual-card chart-card"
+      draggable="true"
+      data-chart-id="statusChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Review queue</span>
+          <h2>Processing status</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box chart-pie">
+        <canvas id="statusChart"></canvas>
+        <div class="chart-empty">No feedback has been submitted yet.</div>
+      </div>
+      <p class="chart-axis-note">
+        Legend: Pending review, Reviewed and Not applicable.
+      </p>
+    </article>
+    <article
+      class="visual-card chart-card"
+      draggable="true"
+      data-chart-id="disabilityChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Population profile</span>
+          <h2>Feedback by disability</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box">
+        <canvas id="disabilityChart"></canvas>
+        <div class="chart-empty">No disability data in this view.</div>
+      </div>
+      <p class="chart-axis-note">
+        <b>X-axis:</b> Feedback count &nbsp; <b>Y-axis:</b> Disability type
+      </p>
+    </article>
+    <article
+      class="visual-card chart-card"
+      draggable="true"
+      data-chart-id="settingChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Service context</span>
+          <h2>Feedback by setting</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box chart-polar">
+        <canvas id="settingChart"></canvas>
+        <div class="chart-empty">No setting data in this view.</div>
+      </div>
+      <p class="chart-axis-note">Legend: service setting and feedback count.</p>
+    </article>
+    <article
+      class="visual-card visual-wide chart-card"
+      draggable="true"
+      data-chart-id="settingRiskChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Risk comparison</span>
+          <h2>Risk bands across settings</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box">
+        <canvas id="settingRiskChart"></canvas>
+        <div class="chart-empty">No reviewed risk data in this view.</div>
+      </div>
+      <p class="chart-axis-note">
+        <b>X-axis:</b> Service setting &nbsp; <b>Y-axis:</b> Number of feedback
+        entries &nbsp; <b>Legend:</b> High / Medium / Low
+      </p>
+    </article>
+    <article
+      class="visual-card chart-card"
+      draggable="true"
+      data-chart-id="barrierChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Barrier profile</span>
+          <h2>Support barriers</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box">
+        <canvas id="barrierChart"></canvas>
+        <div class="chart-empty">No barrier data in this view.</div>
+      </div>
+      <p class="chart-axis-note">
+        Axes: Barrier categories and number of feedback entries.
+      </p>
+    </article>
+    <article
+      class="visual-card chart-card"
+      draggable="true"
+      data-chart-id="conditionChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Device experience</span>
+          <h2>Reported device condition</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box">
+        <canvas id="conditionChart"></canvas>
+        <div class="chart-empty">No condition data in this view.</div>
+      </div>
+      <p class="chart-axis-note">
+        <b>X-axis:</b> Device condition &nbsp; <b>Y-axis:</b> Feedback count
+      </p>
+    </article>
+    <article
+      class="visual-card chart-card"
+      draggable="true"
+      data-chart-id="deviceNeedChart"
+    >
+      <div class="visual-head">
+        <div>
+          <span class="drag-handle"
+            ><i class="fa-solid fa-grip-vertical"></i></span
+          ><span class="section-kicker">Device demand</span>
+          <h2>Devices requested</h2>
+        </div>
+        <button class="chart-remove" title="Remove this chart">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chart-box">
+        <canvas id="deviceNeedChart"></canvas>
+        <div class="chart-empty">No device data in this view.</div>
+      </div>
+      <p class="chart-axis-note">
+        <b>X-axis:</b> Feedback count &nbsp; <b>Y-axis:</b> Device requested
+      </p>
+    </article>
+  </div>
+
+  <div class="priority-panel panel">
+    <div>
+      <span class="section-kicker">Priority queue</span>
+      <h2>High-risk follow-up signal</h2>
+      <p>
+        Use the current filters to open the most important records for review.
+      </p>
+    </div>
+    <div class="priority-stat">
+      <strong id="priorityCount">{{ stats.high }}</strong
+      ><span>high-risk entries<br />in current view</span>
+    </div>
+    <a class="btn" href="{{ url_for('admin_submissions') }}?risk=High"
+      >Review priority cases <i class="fa-solid fa-arrow-right"></i
+    ></a>
+  </div>
+</section>
+<script>
+  window.AT_RISK_RECORDS = [{% for r in records %}{id: {{ r.id }}, risk: {{ (r.risk or '')|tojson }}, status: {{ (r.status or '')|tojson }}, disability: {{ (r.disability_type or 'Unknown')|tojson }}, setting: {{ (r.setting or 'Unknown')|tojson }}, broken: {{ 1 if r.device_broken else 0 }}, financial: {{ 1 if r.financial_barrier else 0 }}, access: {{ 1 if r.availability_barrier else 0 }}, distance: {{ 1 if r.distance_barrier else 0 }}, unmet: {{ 1 if r.unmet_need else 0 }}, user_trained: {{ 1 if r.user_trained else 0 }}, device: {{ (r.device_needed or 'Unknown')|tojson }}, date: {{ (r.created_at or '')|tojson }}}{% if not loop.last %},{% endif %}{% endfor %}];
+  window.AT_RISK_STATS = {{ stats|tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/admin_dashboard.js', v='3') }}"></script>
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends "base.html" %} {% block title %}AT-RISK | Your History{% endblock %}
+{% block content %}
+<section class="dashboard-page history-v2">
+  <div class="history-heading">
+    <div>
+      <span class="eyebrow"
+        ><span class="status-dot"></span> Personal records</span
+      >
+      <h1>Your History</h1>
+      <p>
+        Every feedback entry, review update and available result in one place.
+      </p>
+    </div>
+    <a class="btn" href="{{ url_for('form') }}"
+      ><i class="fa-solid fa-plus"></i> Share new feedback</a
+    >
+  </div>
+  <div class="history-overview">
+    <div>
+      <span class="overview-number">{{ records|length }}</span
+      ><span>Total entries</span>
+    </div>
+    <div>
+      <span class="overview-number amber-text"
+        >{{ records|selectattr('status','equalto','submitted')|list|length
+        }}</span
+      ><span>Pending review</span>
+    </div>
+    <div>
+      <span class="overview-number teal-text"
+        >{{ records|selectattr('status','equalto','predicted')|list|length
+        }}</span
+      ><span>Reviewed</span>
+    </div>
+    <div>
+      <span class="overview-number purple-text"
+        >{{ records|selectattr('is_bookmarked','equalto',1)|list|length }}</span
+      ><span>Saved for follow-up</span>
+    </div>
+  </div>
+  <div class="history-layout">
+    <div class="panel history-v2-panel">
+      <div class="history-toolbar">
+        <div>
+          <span class="section-kicker">Record centre</span>
+          <h2>Submitted feedback</h2>
+        </div>
+        <label class="history-search"
+          ><i class="fa-solid fa-magnifying-glass"></i
+          ><input id="historySearch" placeholder="Search by ID or device..."
+        /></label>
+      </div>
+      {% if records %}
+      <div class="history-records" id="historyRecords">
+        {% for record in records %}
+        <article
+          class="history-record-card"
+          data-search="FB-{{ record.id }} {{ record.device_needed or '' }} {{ record.setting or '' }} {{ record.disability_type or '' }}"
+        >
+          <div class="history-record-top">
+            <span class="history-id">FB-{{ '%04d'|format(record.id) }}</span
+            ><span class="history-date"
+              ><i class="fa-regular fa-calendar"></i> {{ record.created_at
+              }}</span
+            >{% if record.status == 'predicted' %}<span
+              class="risk-pill risk-{{ record.risk|lower }}"
+              >{{ record.risk }} risk · {{ record.risk_score }}%</span
+            >{% elif record.status == 'not_applicable' %}<span
+              class="state-label"
+              >Not applicable</span
+            >{% else %}<span class="pending-pill"
+              ><i class="fa-solid fa-clock"></i> Pending review</span
+            >{% endif %}
+          </div>
+          <div class="history-record-body">
+            <div>
+              <h3>
+                {{ record.device_needed or 'Assistive technology support' }}
+              </h3>
+              <p>
+                {{ record.setting or 'Support setting not recorded' }} · {{
+                record.disability_type or 'General support' }}
+              </p>
+            </div>
+            <div class="history-status">
+              <span
+                class="status-step {% if record.status in ['submitted','predicted','not_applicable'] %}active{% endif %}"
+                ><i class="fa-solid fa-paper-plane"></i> Submitted</span
+              ><span
+                class="status-connector {% if record.status == 'predicted' %}active{% endif %}"
+              ></span
+              ><span
+                class="status-step {% if record.status == 'predicted' %}active{% endif %}"
+                ><i class="fa-solid fa-user-check"></i> Reviewed</span
+              >
+            </div>
+          </div>
+          <div class="history-record-bottom">
+            <span
+              >{% if record.status == 'predicted' %}Your result and explanation
+              are ready.{% elif record.status == 'not_applicable' %}This entry
+              did not require a prediction.{% else %}An administrator will
+              review this entry before showing a result.{% endif %}</span
+            ><a
+              class="text-link"
+              href="{{ url_for('user_record_detail', prediction_id=record.id) }}"
+              >Open details <i class="fa-solid fa-arrow-right"></i
+            ></a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      <div class="history-no-match" id="historyNoMatch" hidden>
+        No matching feedback records found.
+      </div>
+      {% else %}
+      <div class="history-empty">
+        <span><i class="fa-solid fa-clock-rotate-left"></i></span>
+        <h2>Your history will appear here</h2>
+        <p>
+          Once you share feedback, you can track its status and open reviewed
+          results from this page.
+        </p>
+        <a class="btn" href="{{ url_for('form') }}"
+          >Share your first feedback</a
+        >
+      </div>
+      {% endif %}
+    </div>
+    <aside class="history-side">
+      <div class="panel history-guide">
+        <span class="section-kicker">How to read this page</span>
+        <div>
+          <span class="guide-dot submitted"></span>
+          <p>
+            <strong>Submitted</strong
+            ><small>Feedback received by AT-RISK.</small>
+          </p>
+        </div>
+        <div>
+          <span class="guide-dot pending"></span>
+          <p>
+            <strong>Pending review</strong
+            ><small>Waiting for administrator prediction.</small>
+          </p>
+        </div>
+        <div>
+          <span class="guide-dot reviewed"></span>
+          <p>
+            <strong>Reviewed</strong
+            ><small>Result, explanation and next steps available.</small>
+          </p>
+        </div>
+      </div>
+      <div class="history-help">
+        <span><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+        <h3>Need help understanding a question?</h3>
+        <p>Ask the AI helper before you submit your next feedback.</p>
+        <a class="text-link" href="{{ url_for('assistant') }}"
+          >Open assistant <i class="fa-solid fa-arrow-right"></i
+        ></a>
+      </div>
+    </aside>
+  </div>
+</section>
+<script>
+  const historySearch = document.getElementById("historySearch");
+  const historyCards = [...document.querySelectorAll(".history-record-card")];
+  const historyNoMatch = document.getElementById("historyNoMatch");
+  historySearch?.addEventListener("input", () => {
+    const q = historySearch.value.toLowerCase().trim();
+    let visible = 0;
+    historyCards.forEach((card) => {
+      const show = !q || card.dataset.search.toLowerCase().includes(q);
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    if (historyNoMatch) historyNoMatch.hidden = visible !== 0;
+  });
+</script>
+{% endblock %}

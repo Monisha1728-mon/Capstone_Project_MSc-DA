@@ -1,0 +1,47 @@
+{% extends "base.html" %}{% block title %}AT-RISK | Inbox{% endblock %}{% block
+content %}
+<section class="dashboard-page">
+  <div class="eyebrow"><span class="status-dot"></span> Admin inbox</div>
+  <div class="page-heading">
+    <div>
+      <h1>Inbox</h1>
+      <p>
+        Contact messages and review activity that need the admin team's
+        attention.
+      </p>
+    </div>
+    <form method="post" action="{{ url_for('read_messages') }}">
+      <button class="btn btn-secondary" type="submit">
+        <i class="fa-solid fa-check-double"></i> Mark all read
+      </button>
+    </form>
+  </div>
+  <div class="inbox-list">
+    {% for message in messages %}
+    <article
+      class="panel inbox-item {% if not message.is_read %}unread{% endif %}"
+    >
+      <div class="inbox-meta">
+        <span class="avatar small">{{ (message.name or 'U')[0]|upper }}</span>
+        <div>
+          <strong>{{ message.name }}</strong
+          ><small>{{ message.email }} · {{ message.created_at }}</small>
+        </div>
+        {% if not message.is_read %}<span class="unread-badge">New</span>{%
+        endif %}
+      </div>
+      <span class="section-kicker"
+        >{{ message.subject or 'Support enquiry' }}</span
+      >
+      <p>{{ message.message }}</p>
+    </article>
+    {% else %}
+    <div class="panel empty-state">
+      <i class="fa-regular fa-comments"></i>
+      <h3>No messages yet</h3>
+      <p>New contact messages will appear here.</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

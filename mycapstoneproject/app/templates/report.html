@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}AT-RISK | feedback Report{% endblock
+%} {% block content %}
+<section class="report-page">
+  <div class="report-header">
+    <div>
+      <span class="hero-badge">📄 feedback Report</span>
+      <h1>Assistive Technology Risk feedback</h1>
+      <p>Personalized feedback summary</p>
+    </div>
+    <button onclick="window.print()" class="btn">
+      🖨️ Download / Print Report
+    </button>
+  </div>
+  <div class="report-card">
+    <h2>feedback result</h2>
+    <div class="result-box">
+      <span>Estimated Risk</span>
+      <strong>{{ result.risk if result else "N/A" }}</strong>
+      <small> Risk Score: {{ result.risk_score if result else 0 }}% </small>
+    </div>
+    <h2>Explanation</h2>
+    <p>{{ result.message if result else "No feedback result available." }}</p>
+    <h2>Recommended Next Steps</h2>
+    <ul>
+      <li>Review the factors identified in the feedback.</li>
+      <li>
+        Discuss device-related difficulties with an appropriate healthcare
+        professional.
+      </li>
+      <li>
+        Consider maintenance, training or support if these are relevant
+        barriers.
+      </li>
+      <li>
+        Seek appropriate assistive technology services when additional support
+        is required.
+      </li>
+    </ul>
+  </div>
+</section>
+{% endblock %}

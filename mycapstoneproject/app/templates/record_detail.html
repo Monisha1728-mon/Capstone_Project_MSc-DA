@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}AT-RISK | Record details{% endblock %}
+
+{% block content %}
+<section class="narrow-page">
+    <a class="back-link" href="{{ url_for('admin_dashboard' if is_admin else 'user_dashboard') }}">
+        <i class="fa-solid fa-arrow-left"></i> Back to workspace
+    </a>
+
+    <div class="page-heading">
+        <div>
+            <div class="eyebrow">
+                <span class="status-dot"></span>
+                Record #{{ "%04d"|format(record.id) }}
+            </div>
+            <h1>Feedback details</h1>
+            <p>
+                Submitted {{ record.created_at }}
+                {% if is_admin %}
+                    · {{ record.username or "Unknown user" }}
+                {% endif %}
+            </p>
+        </div>
+
+        {% if record.status == "predicted" %}
+            <span class="risk-pill risk-{{ record.risk|lower }} large">
+                {{ record.risk }} risk · {{ record.risk_score }}%
+            </span>
+        {% elif record.status == "not_applicable" %}
+            <span class="state-label">Not applicable</span>
+        {% else %}
+            <span class="pending-pill">
+                <i class="fa-solid fa-hourglass-half"></i>
+                Pending admin prediction
+            </span>
+        {% endif %}
+    </div>
+
+    <div class="detail-grid">
+        <div class="panel detail-main">
+            {% if record.status == "predicted" %}
+                <span class="section-kicker">Prediction summary</span>
+                <h2>Estimated abandonment risk</h2>
+                <div class="score-band score-{{ record.risk|lower }}">
+                    <strong>{{ record.risk_score }}%</strong>
+                    <span>{{ record.risk }} risk level</span>
+                </div>
+                <p>
+                    This estimate helps identify possible barriers to continued
+                    assistive technology use. It is not a medical diagnosis.
+                </p>
+            {% elif record.status == "not_applicable" %}
+                <span class="section-kicker">Feedback review</span>
+                <h2>Prediction not applicable</h2>
+                <p>
+                    The submitted answers indicate that no assistive technology
+                    device was received, so the trained risk model is not run
+                    for this record.
+                </p>
+            {% else %}
+                <span class="section-kicker">Feedback review</span>
+                <h2>Waiting for administrator prediction</h2>
+                <p>
+                    This feedback has been received and stored securely. An
+                    administrator must review it and run the prediction before
+                    a risk level or score is available.
+                </p>
+            {% endif %}
+
+            <div class="detail-columns">
+                <div>
+                    <span>Device need</span>
+                    <strong>{{ record.device_needed or "—" }}</strong>
+                </div>
+                <div>
+                    <span>Disability type</span>
+                    <strong>{{ record.disability_type or "—" }}</strong>
+                </div>
+                <div>
+                    <span>Setting</span>
+                    <strong>{{ record.setting or "—" }}</strong>
+                </div>
+                <div>
+                    <span>Feedback year</span>
+                    <strong>{{ record.year or "—" }}</strong>
+                </div>
+            </div>
+
+            {% if record.status == "predicted" %}
+                <div class="explain-panel">
+                    <div>
+                        <span class="section-kicker">Explainable AI</span>
+                        <h2>Why this result?</h2>
+                        <p>
+                            {{ record.explanation or "The model result is based on the submitted feedback factors." }}
+                        </p>
+                    </div>
+                    <div class="action-plan">
+                        <span class="section-kicker">What can be done next</span>
+                        <p>
+                            {{ record.action_plan or "Continue routine follow-up and review the device experience." }}
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <aside class="side-stack">
+            {% if is_admin %}
+                <div class="panel">
+                    <span class="section-kicker">Admin action</span>
+                    <h2>Review this feedback</h2>
+
+                    {% if record.status == "submitted" or record.status == "new" %}
+                        <form method="post" action="{{ url_for('make_prediction') }}">
+                            <input type="hidden" name="prediction_id" value="{{ record.id }}">
+                            <button class="btn" type="submit">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                Predict this feedback
+                            </button>
+                        </form>
+                    {% elif record.status == "predicted" %}
+                        <p>Prediction completed. You can update the follow-up status below.</p>
+                    {% endif %}
+
+                    <form method="post" action="{{ url_for('admin_record_state', prediction_id=record.id) }}">
+                        <label>
+                            Status
+                            <select name="status">
+                                <option value="new" {% if record.status == "new" %}selected{% endif %}>New</option>
+                                <option value="submitted" {% if record.status == "submitted" %}selected{% endif %}>Pending review</option>
+                                <option value="in_review" {% if record.status == "in_review" %}selected{% endif %}>In review</option>
+                                <option value="follow_up" {% if record.status == "follow_up" %}selected{% endif %}>Follow-up</option>
+                                <option value="closed" {% if record.status == "closed" %}selected{% endif %}>Closed</option>
+                            </select>
+                        </label>
+                        <label class="check-row">
+                            <input type="checkbox" name="is_bookmarked" value="1" {% if record.is_bookmarked %}checked{% endif %}>
+                            Save to priority list
+                        </label>
+                        <button class="btn btn-small" type="submit">Save status</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="panel">
+                    <span class="section-kicker">Follow-up</span>
+                    <h2>Save this record</h2>
+                    <form method="post" action="{{ url_for('bookmark_record', prediction_id=record.id) }}">
+                        <button class="btn btn-secondary" type="submit">
+                            <i class="fa-{{ 'solid' if record.is_bookmarked else 'regular' }} fa-bookmark"></i>
+                            {{ 'Saved for follow-up' if record.is_bookmarked else 'Save for follow-up' }}
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+
+            {% if record.status == "predicted" %}
+                <div class="panel">
+                    <span class="section-kicker">Your report</span>
+                    <p>Download the completed report after administrator review.</p>
+                    <a class="btn btn-secondary" href="{{ url_for('report_pdf', prediction_id=record.id) }}">
+                        <i class="fa-solid fa-download"></i>
+                        Download PDF
+                    </a>
+                </div>
+            {% endif %}
+        </aside>
+    </div>
+</section>
+{% endblock %}

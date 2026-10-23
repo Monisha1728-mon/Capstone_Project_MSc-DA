@@ -1,0 +1,97 @@
+{% extends "base.html" %}{% block title %}AT-RISK | Assistive technology
+insight{% endblock %}{% block content %}
+<section class="hero-modern">
+  <div class="hero-copy">
+    <div class="eyebrow">
+      <span class="status-dot"></span> Assistive technology support intelligence
+    </div>
+    <h1>Turn support feedback into <span>better follow-up.</span></h1>
+    <p>
+      AT-RISK helps users share their assistive technology experience and helps
+      administrators review abandonment risk with clear explanations, practical
+      actions and timely follow-up.
+    </p>
+    <div class="hero-actions">
+      <a href="{{ url_for('login') }}" class="btn"
+        ><i class="fa-solid fa-arrow-right"></i> Share your support feedback</a
+      ><a href="#how" class="btn btn-secondary">See how it works</a>
+    </div>
+    <div class="trust-row">
+      <span><i class="fa-solid fa-circle-check"></i> Explainable results</span
+      ><span><i class="fa-solid fa-circle-check"></i> Secure workspace</span
+      ><span><i class="fa-solid fa-circle-check"></i> PDF reports</span>
+    </div>
+  </div>
+  <div class="hero-preview">
+    <div class="preview-top">
+      <span>Latest feedback</span><i class="fa-solid fa-ellipsis"></i>
+    </div>
+    <div class="preview-score">
+      <div>
+        <small>Estimated risk</small><strong>Medium</strong
+        ><span>52.8% likelihood</span>
+      </div>
+      <div class="mini-ring"><b>53</b><small>%</small></div>
+    </div>
+    <div class="preview-bar"><i></i></div>
+    <div class="preview-note">
+      <span><i class="fa-solid fa-lightbulb"></i></span>
+      <div>
+        <strong>Why this matters</strong>
+        <p>Use the result as a conversation starter with your support team.</p>
+      </div>
+    </div>
+    <div class="preview-footer">
+      <span><i class="fa-regular fa-bookmark"></i> Saved for follow-up</span
+      ><span>AT-0042</span>
+    </div>
+  </div>
+</section>
+<section class="feature-strip" id="how">
+  <div>
+    <span class="feature-number">01</span><strong>Share your experience</strong>
+    <p>Simple questions about your device, support and daily experience.</p>
+  </div>
+  <div>
+    <span class="feature-number">02</span
+    ><strong>Administrator reviews your feedback</strong>
+    <p>
+      The support team reviews your information and runs the risk prediction.
+    </p>
+  </div>
+  <div>
+    <span class="feature-number">03</span><strong>Get clear next steps</strong>
+    <p>View your reviewed status, explanation and recommended follow-up.</p>
+  </div>
+</section>
+<section class="home-bottom">
+  <div>
+    <span class="section-kicker">Built for two perspectives</span>
+    <h2>One connected view of support.</h2>
+  </div>
+  <div class="role-cards">
+    <div class="role-card">
+      <span><i class="fa-solid fa-user"></i></span>
+      <h3>For users</h3>
+      <p>
+        Keep your feedback history, bookmark records, ask the assistant and
+        contact support in one place.
+      </p>
+      <a href="{{ url_for('register') }}" class="text-link"
+        >Create a user account <i class="fa-solid fa-arrow-right"></i
+      ></a>
+    </div>
+    <div class="role-card">
+      <span><i class="fa-solid fa-shield-halved"></i></span>
+      <h3>For administrators</h3>
+      <p>
+        See new users, recent feedback entries, risk distribution and feedback
+        notifications from one operations centre.
+      </p>
+      <a href="{{ url_for('admin_login') }}" class="text-link"
+        >Admin sign in <i class="fa-solid fa-arrow-right"></i
+      ></a>
+    </div>
+  </div>
+</section>
+{% endblock %}

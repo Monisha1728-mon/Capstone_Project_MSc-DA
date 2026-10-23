@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block title %}AT-RISK | Admin Login{% endblock %}
+{% block content %}
+<section class="auth-page">
+  <div class="auth-card admin-auth">
+    <div class="auth-icon">🛡️</div>
+    <span class="hero-badge">Administrator Access</span>
+    <h1>Admin Login</h1>
+    <p class="auth-subtitle">
+      Authorized administrators can access user records, risk analytics and
+      system statistics.
+    </p>
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    <form method="post" action="{{ url_for('admin_login') }}">
+      <label>Admin Username</label>
+      <input
+        type="text"
+        name="username"
+        placeholder="Enter admin username"
+        required
+      />
+      <label>Password</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter admin password"
+        required
+      />
+      <button type="submit" class="btn auth-btn">Admin Login →</button>
+    </form>
+    <div class="security-note">
+      🔒 This area is restricted to authorized administrators.
+    </div>
+    <div class="back-link">
+      <a href="{{ url_for('login') }}">← Back to User / Admin Selection</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "base.html" %} {% block title %}AT-RISK | View Feedback{% endblock %}
+{% block content %}
+<section class="dashboard-page">
+  <div class="eyebrow"><span class="status-dot"></span> Feedback review</div>
+  <div class="page-heading">
+    <div>
+      <h1>View user feedback</h1>
+      <p>
+        Review every entry in a clear dataset-style table. Predict one entry at
+        a time or process all pending feedback together.
+      </p>
+    </div>
+    <div class="heading-actions">
+      <form method="post" action="{{ url_for('predict_all') }}">
+        <button class="btn" type="submit">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Predict all pending
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="filter-bar panel">
+    <label for="submissionSearch">
+      Search
+      <input id="submissionSearch" type="search" placeholder="Name or device" />
+    </label>
+    <label for="statusFilter">
+      Review status
+      <select id="statusFilter">
+        <option value="all">All statuses</option>
+        <option value="submitted">Pending review</option>
+        <option value="predicted">Reviewed</option>
+        <option value="not_applicable">Not applicable</option>
+      </select>
+    </label>
+    <label for="riskFilter">
+      Risk
+      <select id="riskFilter">
+        <option value="all">All risk levels</option>
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+      </select>
+    </label>
+  </div>
+  <div class="panel table-panel admin-submission-panel">
+    <div class="table-scroll">
+      <table id="submissionsTable" class="admin-submissions-table">
+        <thead>
+          <tr>
+            <th>Feedback ID</th>
+            <th>User</th>
+            <th>Year</th>
+            <th>Age</th>
+            <th>Device requested</th>
+            <th>Disability type</th>
+            <th>Device condition</th>
+            <th>Risk result</th>
+            <th>Review status</th>
+            <th>Admin action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in records %}
+          <tr
+            data-status="{{ record.status }}"
+            data-risk="{{ record.risk or '' }}"
+            data-search="{{ (record.username or '')|lower }} {{ (record.device_needed or '')|lower }}"
+          >
+            <td><strong>FB-{{ '%04d'|format(record.id) }}</strong></td>
+            <td>{{ record.username or 'Unknown user' }}</td>
+            <td>{{ record.year or '—' }}</td>
+            <td>{{ record.age or '—' }}</td>
+            <td>{{ record.device_needed or 'Not recorded' }}</td>
+            <td>{{ record.disability_type or 'Not recorded' }}</td>
+            <td>
+              {% if record.device_broken == 1 %}
+              <span class="flag-badge danger">Damaged</span>
+              {% else %}
+              <span class="flag-badge">Recorded</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if record.status == "predicted" %}
+              <span class="risk-pill risk-{{ record.risk|lower }}"
+                >{{ record.risk }} · {{ record.risk_score }}%</span
+              >
+              {% else %}Awaiting review{% endif %}
+            </td>
+            <td>
+              {% if record.status == "submitted" %}
+              <span class="state-label state-submitted">Pending review</span>
+              {% elif record.status == "predicted" %}
+              <span class="state-label state-predicted">Reviewed</span>
+              {% else %}
+              <span class="state-label">Not applicable</span>
+              {% endif %}
+            </td>
+            <td class="submission-action-cell">
+              {% if record.status == "submitted" %}
+              <form method="post" action="{{ url_for('make_prediction') }}">
+                <input
+                  type="hidden"
+                  name="prediction_id"
+                  value="{{ record.id }}"
+                />
+                <button class="btn btn-small" type="submit">Predict</button>
+              </form>
+              {% else %}
+              <a
+                class="text-link"
+                href="{{ url_for('admin_record_detail', prediction_id=record.id) }}"
+              >
+                View result
+              </a>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="10" class="empty-table">No feedback entries yet.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<script>
+  const searchBox = document.getElementById("submissionSearch");
+  const statusFilter = document.getElementById("statusFilter");
+  const riskFilter = document.getElementById("riskFilter");
+
+  function filterRows() {
+    const term = searchBox.value.toLowerCase();
+    const status = statusFilter.value;
+    const risk = riskFilter.value;
+
+    document
+      .querySelectorAll("#submissionsTable tbody tr[data-status]")
+      .forEach((row) => {
+        const matchesText = row.dataset.search.includes(term);
+        const matchesStatus = status === "all" || row.dataset.status === status;
+        const matchesRisk = risk === "all" || row.dataset.risk === risk;
+        row.style.display =
+          matchesText && matchesStatus && matchesRisk ? "" : "none";
+      });
+  }
+
+  searchBox.addEventListener("input", filterRows);
+  statusFilter.addEventListener("change", filterRows);
+  riskFilter.addEventListener("change", filterRows);
+</script>
+{% endblock %}

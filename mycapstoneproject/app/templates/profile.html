@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}AT-RISK | Profile{% endblock %}
+
+{% block content %}
+<section class="narrow-page">
+    <div class="eyebrow"><span class="status-dot"></span> Account centre</div>
+    <div class="page-heading">
+        <div>
+            <h1>{{ 'Admin profile' if admin else 'My profile' }}</h1>
+            <p>Keep your account details current so your workspace stays personal and useful.</p>
+        </div>
+    </div>
+
+    {% if success %}<div class="success">{{ success }}</div>{% endif %}
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+    <div class="settings-layout">
+        <div class="panel form-panel">
+            <div class="profile-banner">
+                <span class="profile-avatar">{{ (user.name or 'U')[0]|upper }}</span>
+                <div>
+                    <h2>{{ user.name }}</h2>
+                    <p>{{ 'Administrator account' if admin else 'AT-RISK member' }}</p>
+                </div>
+            </div>
+
+            <form method="post">
+                <label for="name">
+                    Full name
+                    <input id="name" name="name" value="{{ user.name }}" required>
+                </label>
+                <label for="phone">
+                    Phone number <span class="optional">(optional)</span>
+                    <input id="phone" name="phone" value="{{ user.phone or '' }}" placeholder="Add a contact number">
+                </label>
+                <button class="btn" type="submit">Save profile</button>
+            </form>
+        </div>
+
+        <div class="panel settings-nav">
+            <span class="section-kicker">Account tools</span>
+            <a class="settings-link active" href="{{ url_for('admin_profile' if admin else 'profile') }}">
+                <i class="fa-solid fa-user"></i>
+                <span><strong>Profile</strong><small>Personal details</small></span>
+            </a>
+            <a class="settings-link" href="{{ url_for('admin_settings' if admin else 'settings') }}">
+                <i class="fa-solid fa-lock"></i>
+                <span>
+                    <strong>{{ 'Notifications & settings' if admin else 'Password & settings' }}</strong>
+                    <small>Security and preferences</small>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

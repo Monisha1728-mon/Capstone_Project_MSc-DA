@@ -1,0 +1,73 @@
+{% extends "base.html" %} {% block title %}AT-RISK | Contact Support{% endblock
+%} {% block content %}
+<section class="narrow-page">
+  <div class="eyebrow"><span class="status-dot"></span> Support centre</div>
+  <div class="page-heading">
+    <div>
+      <h1>We are here to help.</h1>
+      <p>
+        Send a question about your feedback, device experience, account or
+        follow-up. The administrator will see it in the inbox.
+      </p>
+    </div>
+  </div>
+  {% if success %}
+  <div class="success">{{ success }}</div>
+  {% endif %} {% if error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+  <div class="contact-layout">
+    <div class="panel form-panel">
+      <span class="section-kicker">Send feedback</span>
+      <h2>Tell the support team what you need</h2>
+      <form method="post" action="{{ url_for('contact') }}">
+        <label for="name">
+          Name
+          <input
+            id="name"
+            name="name"
+            value="{{ session.get('username', '') }}"
+            required
+          />
+        </label>
+        <label for="subject">
+          Topic
+          <select id="subject" name="subject">
+            <option value="Feedback help">Feedback help</option>
+            <option value="Account help">Account help</option>
+            <option value="Device follow-up">Device follow-up</option>
+            <option value="General enquiry">General enquiry</option>
+          </select>
+        </label>
+        <label for="message">
+          Message
+          <textarea
+            id="message"
+            name="message"
+            rows="6"
+            required
+            placeholder="Tell us what you need help with..."
+          ></textarea>
+        </label>
+        <button class="btn" type="submit">
+          Send to support <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+    </div>
+    <div class="support-card">
+      <span class="support-orb"><i class="fa-solid fa-headset"></i></span>
+      <h3>What happens next?</h3>
+      <p>
+        Your message is stored in the admin inbox and marked as a new
+        notification. The support team can review it alongside your recent
+        feedback entries.
+      </p>
+      <div class="contact-points">
+        <span><i class="fa-solid fa-check"></i> Admin notification</span>
+        <span><i class="fa-solid fa-check"></i> Secure record</span>
+        <span><i class="fa-solid fa-check"></i> Follow-up ready</span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %} {% block title %}AT-RISK | Create Account{% endblock
+%} {% block content %}
+<section class="auth-page">
+  <div class="auth-card register-card">
+    <div class="auth-icon">
+      <i class="fa-solid fa-user-plus"></i>
+    </div>
+    <span class="hero-badge">New user</span>
+    <h1>Create your account</h1>
+    <p class="auth-subtitle">
+      Use your name and password to create a secure AT-RISK workspace. No email
+      account is required.
+    </p>
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    <form method="post" action="{{ url_for('register') }}">
+      <label for="full_name">
+        Your name
+        <input
+          id="full_name"
+          type="text"
+          name="full_name"
+          placeholder="Enter your name"
+          autocomplete="name"
+          required
+        />
+      </label>
+      <label for="phone">
+        Mobile number <span class="optional">(optional)</span>
+        <input
+          id="phone"
+          type="tel"
+          name="phone"
+          placeholder="Enter your mobile number"
+          autocomplete="tel"
+        />
+      </label>
+      <label for="password">
+        Password
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="Create a password"
+          autocomplete="new-password"
+          minlength="6"
+          required
+        />
+      </label>
+      <button type="submit" class="btn auth-btn">
+        Create account <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
+    <div class="security-note">
+      You can log in again later using the same name and password.
+    </div>
+    <div class="auth-links">
+      <span>Already have an account?</span>
+      <a href="{{ url_for('user_login') }}">Log in</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

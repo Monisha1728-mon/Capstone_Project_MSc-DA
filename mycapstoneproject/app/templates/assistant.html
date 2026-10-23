@@ -1,0 +1,111 @@
+{% extends "base.html" %} {% block title %}AT-RISK | AI Support Assistant{%
+endblock %} {% block content %}
+<section class="assistant-v2-page">
+  <div class="assistant-v2-shell">
+    <aside class="assistant-v2-sidebar">
+      <div class="assistant-profile">
+        <span class="assistant-avatar"
+          ><i class="fa-solid fa-sparkles"></i
+        ></span>
+        <div>
+          <strong>AT-RISK AI helper</strong
+          ><span><i class="online-dot"></i> Ready to help</span>
+        </div>
+      </div>
+      <div class="assistant-intro">
+        <span class="section-kicker">Your friendly guide</span>
+        <h2>Ask naturally.</h2>
+        <p>
+          I can explain feedback questions, help you prepare answers and make
+          reviewed results easier to understand.
+        </p>
+      </div>
+      <div class="assistant-topic-list">
+        <button data-question="Help me fill the feedback form step by step">
+          <i class="fa-solid fa-pen-to-square"></i
+          ><span>Fill the feedback form</span></button
+        ><button data-question="What should I write about my damaged device?">
+          <i class="fa-solid fa-screwdriver-wrench"></i
+          ><span>Device condition help</span></button
+        ><button
+          data-question="What information should I give about training and maintenance?"
+        >
+          <i class="fa-solid fa-graduation-cap"></i
+          ><span>Training and maintenance</span></button
+        ><button data-question="What can I ask my support team after review?">
+          <i class="fa-solid fa-comments"></i><span>Questions for support</span>
+        </button>
+      </div>
+      <div class="assistant-safety">
+        <i class="fa-solid fa-shield-heart"></i
+        ><span
+          >This is support guidance, not a medical diagnosis. Your answers
+          remain part of your AT-RISK workspace.</span
+        >
+      </div>
+    </aside>
+    <main class="assistant-v2-main">
+      <header class="assistant-v2-header">
+        <div>
+          <span class="eyebrow"
+            ><span class="status-dot"></span> Conversational support</span
+          >
+          <h1>How can I help today?</h1>
+          <p>
+            Ask me like you would ask a patient, friend or support coordinator.
+          </p>
+        </div>
+        <div class="assistant-header-actions">
+          <button class="btn btn-secondary" id="clearChat">
+            <i class="fa-solid fa-rotate-left"></i> New conversation</button
+          ><a class="btn" href="{{ url_for('user_dashboard') }}"
+            >Back to workspace</a
+          >
+        </div>
+      </header>
+      <div class="assistant-conversation" id="chatMessages">
+        <div class="assistant-welcome">
+          <span class="message-avatar"
+            ><i class="fa-solid fa-sparkles"></i
+          ></span>
+          <div>
+            <strong>Hi {{ session.get('username', 'there') }}.</strong>
+            <p>
+              I’m here with you. Tell me what you are trying to do and I’ll
+              guide you one step at a time.
+            </p>
+            <span class="welcome-time">Just now</span>
+          </div>
+        </div>
+      </div>
+      <div class="assistant-suggestions">
+        <span>Try asking</span
+        ><button data-question="Please explain the first feedback question">
+          Explain a question</button
+        ><button data-question="Help me answer the feedback without guessing">
+          Help me answer</button
+        ><button data-question="Explain my reviewed result in simple words">
+          Explain my result
+        </button>
+      </div>
+      <form class="assistant-composer" id="chatForm">
+        <textarea
+          id="chatInput"
+          rows="1"
+          placeholder="Type your question here..."
+          autocomplete="off"
+          required
+        ></textarea
+        ><button class="send-button" type="submit">
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </form>
+      <div class="assistant-composer-note">
+        <i class="fa-solid fa-lock"></i> Ask anything about feedback, device
+        use, training, repair, cost or review results.
+      </div>
+    </main>
+  </div>
+</section>
+<script src="{{ url_for('static', filename='js/assistant_chat.js', v='3') }}"></script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block title %}AT-RISK | User Login{% endblock %} {%
+block content %}
+<section class="auth-page">
+  <div class="auth-card">
+    <div class="auth-icon">
+      <i class="fa-solid fa-user"></i>
+    </div>
+    <span class="hero-badge">User access</span>
+    <h1>Welcome back</h1>
+    <p class="auth-subtitle">
+      Log in to submit feedback, follow administrator review updates, view your
+      history and download reviewed reports.
+    </p>
+    {% if success %}
+    <div class="success">{{ success }}</div>
+    {% endif %} {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+    <form method="post" action="{{ url_for('user_login') }}">
+      <label for="username">
+        Name
+        <input
+          id="username"
+          type="text"
+          name="username"
+          placeholder="Enter the name used during registration"
+          autocomplete="username"
+          required
+        />
+      </label>
+      <label for="password">
+        Password
+        <input
+          id="password"
+          type="password"
+          name="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+        />
+      </label>
+      <button type="submit" class="btn auth-btn">
+        Log in <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </form>
+    <div class="auth-links">
+      <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+      <span>New user?</span>
+      <a href="{{ url_for('register') }}">Create account</a>
+    </div>
+    <div class="back-link">
+      <a href="{{ url_for('login') }}">← Back to user / admin selection</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

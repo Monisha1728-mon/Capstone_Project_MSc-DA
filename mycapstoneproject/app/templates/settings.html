@@ -1,0 +1,97 @@
+{% extends "base.html" %}{% block title %}AT-RISK | Settings{% endblock %}{%
+block content %}
+<section class="narrow-page">
+  <div class="eyebrow"><span class="status-dot"></span> Account centre</div>
+  <div class="page-heading">
+    <div>
+      <h1>{{ 'Admin settings' if admin else 'Password & settings' }}</h1>
+      <p>
+        {{ 'Choose how you want to stay informed about new feedback and review
+        activity.' if admin else 'Manage your sign-in security and workspace
+        preferences.' }}
+      </p>
+    </div>
+  </div>
+  {% if success %}
+  <div class="success">{{ success }}</div>
+  {% endif %}{% if error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+  <div class="settings-layout">
+    <div class="panel form-panel">
+      {% if admin %}
+      <form method="post">
+        <div class="preference-row">
+          <span class="preference-icon"><i class="fa-solid fa-bell"></i></span>
+          <div>
+            <strong>New feedback alerts</strong
+            ><small>Show an unread badge when a user contacts support.</small>
+          </div>
+          <label class="switch"
+            ><input
+              type="checkbox"
+              checked
+              name="feedback_alerts" /><span></span
+          ></label>
+        </div>
+        <div class="preference-row">
+          <span class="preference-icon"
+            ><i class="fa-solid fa-chart-line"></i
+          ></span>
+          <div>
+            <strong>Risk review reminders</strong
+            ><small
+              >Keep follow-up cases visible in the operations centre.</small
+            >
+          </div>
+          <label class="switch"
+            ><input type="checkbox" checked name="risk_reminders" /><span></span
+          ></label>
+        </div>
+        <button class="btn" type="submit">Save preferences</button>
+      </form>
+      {% else %}
+      <form method="post">
+        <label
+          >Current password<input
+            type="password"
+            name="current_password"
+            required /></label
+        ><label
+          >New password<input
+            type="password"
+            name="new_password"
+            minlength="6"
+            required /></label
+        ><label
+          >Confirm new password<input
+            type="password"
+            name="confirm_password"
+            minlength="6"
+            required /></label
+        ><button class="btn" type="submit">Change password</button>
+      </form>
+      {% endif %}
+    </div>
+    <div class="panel settings-nav">
+      <span class="section-kicker">Account tools</span
+      ><a
+        class="settings-link"
+        href="{{ url_for('admin_profile' if admin else 'profile') }}"
+        ><i class="fa-solid fa-user"></i
+        ><span><strong>Profile</strong><small>Personal details</small></span></a
+      ><a
+        class="settings-link active"
+        href="{{ url_for('admin_settings' if admin else 'settings') }}"
+        ><i class="fa-solid fa-lock"></i
+        ><span
+          ><strong
+            >{{ 'Notifications & settings' if admin else 'Password & settings'
+            }}</strong
+          ><small>Security and preferences</small></span
+        ></a
+      >
+    </div>
+  </div>
+</section>
+{% endblock %}

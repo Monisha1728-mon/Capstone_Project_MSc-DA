@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}AT-RISK | Verify{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card auth-card-compact">
+        <div class="auth-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <span class="hero-badge">Secure verification</span>
+        <h1>Verify your account</h1>
+        <p class="auth-subtitle">
+            Enter the six-digit code if verification is requested for an older
+            account or a password-recovery action.
+        </p>
+
+        {% if info %}<div class="success">{{ info }}</div>{% endif %}
+        {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+        <form method="post" action="{{ url_for('verify_otp') }}">
+            <label for="otp">
+                Verification code
+                <input id="otp" name="otp" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required autofocus>
+            </label>
+            <button class="btn auth-btn" type="submit">
+                Verify and continue <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+
+        {% if demo_code %}
+        <div class="otp-help">
+            <strong>Local demo mode</strong>
+            <p>Use this temporary code on this computer:</p>
+            <span class="demo-otp">{{ demo_code }}</span>
+        </div>
+        {% endif %}
+
+        <a class="back-link" href="{{ url_for('user_login') }}">Back to login</a>
+    </div>
+</section>
+{% endblock %}

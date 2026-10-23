@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assistive Technology Support Feedback</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #1f2937;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 14px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      h1 {
+        margin-top: 0;
+        text-align: center;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #6b7280;
+        margin-bottom: 30px;
+      }
+
+      .step {
+        display: none;
+      }
+
+      .step.active {
+        display: block;
+      }
+
+      .question {
+        margin-bottom: 22px;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 15px;
+      }
+
+      .radio-group {
+        display: flex;
+        gap: 20px;
+      }
+
+      .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: normal;
+      }
+
+      .radio-option input {
+        width: auto;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+      }
+
+      button {
+        border: none;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      .next-btn,
+      .submit-btn {
+        background: #2563eb;
+        color: white;
+      }
+
+      .back-btn {
+        background: #e5e7eb;
+        color: #111827;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .error {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .info {
+        background: #eff6ff;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+      }
+
+      .progress {
+        width: 100%;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 10px;
+        margin-bottom: 30px;
+      }
+
+      .progress-bar {
+        height: 100%;
+        width: 25%;
+        background: #2563eb;
+        border-radius: 10px;
+        transition: width 0.3s;
+      }
+
+      .step-title {
+        margin-bottom: 25px;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          margin: 10px auto;
+          padding: 10px;
+        }
+
+        .card {
+          padding: 20px;
+        }
+
+        .radio-group {
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>Assistive Technology Support Feedback</h1>
+        <p class="subtitle">Share your device and support experience. The administrator will review your feedback before any risk result is generated.</p>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %} {% if not_applicable %}
+        <div class="info">
+          <strong>Prediction Not Applicable</strong>
+          <p>{{ message }}</p>
+        </div>
+        <a href="{{ url_for('form') }}">
+          <button type="button" class="next-btn">Start Again</button>
+        </a>
+        {% else %}
+        <form
+          method="post"
+          action="{{ url_for('submit_assessment') }}"
+          id="feedbackForm"
+        >
+          <!-- ========================= -->
+          <!-- STEP 1 -->
+          <!-- ========================= -->
+          <div class="step active" id="step1">
+            <h2 class="step-title">Step 1 — Basic Information</h2>
+            <div class="progress">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <!-- Q1 -->
+            <div class="question">
+              <label>Q1. Did you receive an assistive technology device?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="device_received"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="device_received"
+                    value="0"
+                    required
+                  />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q2 -->
+            <div class="question">
+              <label for="year">Q2. Year</label>
+              <select name="year" id="year" required>
+                <option value="">Select year</option>
+                {% for year in range(2010, 2025) %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <!-- Q3 -->
+            <div class="question">
+              <label for="age">Q3. Age</label>
+              <input
+                type="number"
+                name="age"
+                id="age"
+                min="0"
+                max="120"
+                required
+              />
+            </div>
+            <!-- Q4 -->
+            <div class="question">
+              <label for="sex">Q4. Sex</label>
+              <select name="sex" id="sex" required>
+                <option value="">Select</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+              </select>
+            </div>
+            <!-- Q5 -->
+            <div class="question">
+              <label for="disability_type">Q5. Disability type</label>
+              <select name="disability_type" id="disability_type" required>
+                <option value="">Select</option>
+                <option value="communication">Communication</option>
+                <option value="hearing">Hearing</option>
+                <option value="mobility">Mobility</option>
+                <option value="multiple">Multiple</option>
+                <option value="visual">Visual</option>
+              </select>
+            </div>
+            <div class="buttons">
+              <span></span>
+              <button type="button" class="next-btn" onclick="nextStep()">
+                Next →
+              </button>
+            </div>
+          </div>
+          <!-- ========================= -->
+          <!-- STEP 2 -->
+          <!-- ========================= -->
+          <div class="step" id="step2">
+            <h2 class="step-title">Step 2 — Device & Service Information</h2>
+            <div class="progress">
+              <div class="progress-bar" style="width: 50%"></div>
+            </div>
+            <!-- Q6 -->
+            <div class="question">
+              <label for="device_needed"
+                >Q6. What type of assistive device was needed?</label
+              >
+              <select name="device_needed" id="device_needed" required>
+                <option value="">Select</option>
+                <option value="communication_device">
+                  Communication device
+                </option>
+                <option value="crutches_walker">Crutches / Walker</option>
+                <option value="hearing_aid">Hearing aid</option>
+                <option value="improvised_device">Improvised device</option>
+                <option value="orthosis">Orthosis</option>
+                <option value="other">Other</option>
+                <option value="prosthesis">Prosthesis</option>
+                <option value="spectacles">Spectacles</option>
+                <option value="wheelchair">Wheelchair</option>
+                <option value="white_cane">White cane</option>
+              </select>
+            </div>
+            <!-- Q7 -->
+            <div class="question">
+              <label for="scenario">Q7. Scenario</label>
+              <select name="scenario" id="scenario" required>
+                <option value="">Select</option>
+                <option value="district_outreach">District outreach</option>
+                <option value="rural_community">Rural community</option>
+                <option value="urban_assistive_centre">
+                  Urban assistive centre
+                </option>
+              </select>
+            </div>
+            <!-- Q8 -->
+            <div class="question">
+              <label for="setting">Q8. Setting</label>
+              <select name="setting" id="setting" required>
+                <option value="">Select</option>
+                <option value="NGO_programme">NGO programme</option>
+                <option value="assistive_tech_centre">
+                  Assistive tech centre
+                </option>
+                <option value="cbr_programme">CBR programme</option>
+                <option value="community_home">Community / Home</option>
+                <option value="district_hospital">District hospital</option>
+                <option value="donation_distribution">
+                  Donation distribution
+                </option>
+                <option value="health_centre">Health centre</option>
+                <option value="health_post">Health post</option>
+                <option value="orthopaedic_workshop">
+                  Orthopaedic workshop
+                </option>
+                <option value="outreach_camp">Outreach camp</option>
+                <option value="private_supplier">Private supplier</option>
+                <option value="rehab_hospital">Rehab hospital</option>
+              </select>
+            </div>
+            <!-- Q9 -->
+            <div class="question">
+              <label>Q9. Was the person assessed?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="assessed" value="1" required />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="assessed" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q10 -->
+            <div class="question">
+              <label>Q10. Was the device an appropriate fit?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="appropriate_fit"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="appropriate_fit" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q11 -->
+            <div class="question">
+              <label>Q11. Was the user trained?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="user_trained" value="1" required />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="user_trained" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q12 -->
+            <div class="question">
+              <label for="device_source"
+                >Q12. What was the source of the device?</label
+              >
+              <select name="device_source" id="device_source" required>
+                <option value="">Select</option>
+                <option value="NGO">NGO</option>
+                <option value="donated">Donated</option>
+                <option value="government">Government</option>
+                <option value="local_made">Local made</option>
+                <option value="purchased">Purchased</option>
+              </select>
+            </div>
+            <!-- Q13 -->
+            <div class="question">
+              <label>Q13. Was the device locally manufactured?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="locally_manufactured"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="locally_manufactured" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q14 -->
+            <div class="question">
+              <label>Q14. Was maintenance available?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="maintenance_available"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="maintenance_available" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <div class="buttons">
+              <button type="button" class="back-btn" onclick="previousStep()">
+                ← Back
+              </button>
+              <button type="button" class="next-btn" onclick="nextStep()">
+                Next →
+              </button>
+            </div>
+          </div>
+          <!-- ========================= -->
+          <!-- STEP 3 -->
+          <!-- ========================= -->
+          <div class="step" id="step3">
+            <h2 class="step-title">Step 3 — Barriers & Device Condition</h2>
+            <div class="progress">
+              <div class="progress-bar" style="width: 75%"></div>
+            </div>
+            <!-- Q15 -->
+            <div class="question">
+              <label>Q15. Did the device become broken?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="device_broken" value="1" required />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="device_broken" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q16 -->
+            <div class="question">
+              <label>Q16. Was the cost affordable?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="cost_affordable"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="cost_affordable" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q17 -->
+            <div class="question">
+              <label>Q17. Was it covered by insurance?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="insurance_covered"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="insurance_covered" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q18 -->
+            <div class="question">
+              <label>Q18. Was there a financial barrier?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="financial_barrier"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="financial_barrier" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q19 -->
+            <div class="question">
+              <label>Q19. Was there an availability barrier?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="availability_barrier"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="availability_barrier" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q20 -->
+            <div class="question">
+              <label>Q20. Was distance a barrier?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="distance_barrier"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="distance_barrier" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <div class="buttons">
+              <button type="button" class="back-btn" onclick="previousStep()">
+                ← Back
+              </button>
+              <button type="button" class="next-btn" onclick="nextStep()">
+                Next →
+              </button>
+            </div>
+          </div>
+          <!-- ========================= -->
+          <!-- STEP 4 -->
+          <!-- ========================= -->
+          <div class="step" id="step4">
+            <h2 class="step-title">Step 4 — User Experience</h2>
+            <div class="progress">
+              <div class="progress-bar" style="width: 100%"></div>
+            </div>
+            <!-- Q21 -->
+            <div class="question">
+              <label>Q21. Did the device provide functional improvement?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="functional_improvement"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="functional_improvement" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q22 -->
+            <div class="question">
+              <label>Q22. Did independence improve?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="independence_improved"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="independence_improved" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q23 -->
+            <div class="question">
+              <label>Q23. Did participation improve?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input
+                    type="radio"
+                    name="participation_improved"
+                    value="1"
+                    required
+                  />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="participation_improved" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q24 -->
+            <div class="question">
+              <label>Q24. Are you satisfied with the device?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="satisfaction" value="1" required />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="satisfaction" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <!-- Q25 -->
+            <div class="question">
+              <label>Q25. Is there an unmet assistive technology need?</label>
+              <div class="radio-group">
+                <label class="radio-option">
+                  <input type="radio" name="unmet_need" value="1" required />
+                  Yes
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="unmet_need" value="0" />
+                  No
+                </label>
+              </div>
+            </div>
+            <div class="buttons">
+              <button type="button" class="back-btn" onclick="previousStep()">
+                ← Back
+              </button>
+              <button type="submit" class="submit-btn">Submit feedback</button>
+            </div>
+          </div>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    <script>
+      let currentStep = 1;
+      const totalSteps = 4;
+
+      function showStep(step) {
+        document.querySelectorAll(".step").forEach(function (element) {
+          element.classList.remove("active");
+        });
+
+        const selectedStep = document.getElementById("step" + step);
+
+        if (selectedStep) {
+          selectedStep.classList.add("active");
+        }
+
+        currentStep = step;
+
+        const progress = document.getElementById("progressBar");
+
+        if (progress) {
+          progress.style.width = (step / totalSteps) * 100 + "%";
+        }
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
+
+      function validateCurrentStep() {
+        const current = document.getElementById("step" + currentStep);
+
+        if (!current) {
+          return true;
+        }
+
+        const fields = current.querySelectorAll("input, select");
+
+        for (let field of fields) {
+          if (!field.checkValidity()) {
+            field.reportValidity();
+
+            return false;
+          }
+        }
+
+        return true;
+      }
+
+      function nextStep() {
+        if (!validateCurrentStep()) {
+          return;
+        }
+
+        // Q1 special logic
+        if (currentStep === 1) {
+          const deviceReceived = document.querySelector(
+            'input[name="device_received"]:checked',
+          );
+
+          if (!deviceReceived) {
+            alert("Please answer whether the device was received.");
+
+            return;
+          }
+
+          if (deviceReceived.value === "0") {
+            alert(
+              "Prediction is not applicable because no assistive technology device was received.",
+            );
+
+            return;
+          }
+        }
+
+        if (currentStep < totalSteps) {
+          showStep(currentStep + 1);
+        }
+      }
+
+      function previousStep() {
+        if (currentStep > 1) {
+          showStep(currentStep - 1);
+        }
+      }
+
+      // Start on Step 1
+      showStep(1);
+    </script>
+    <div class="standalone-ai-link">
+      <a href="{{ url_for('assistant') }}" aria-label="Open AI assistant"
+        >☁<span>AI help</span></a
+      >
+    </div>
+    <script src="{{ url_for('static', filename='js/chat_widget.js') }}"></script>
+  </body>
+</html>

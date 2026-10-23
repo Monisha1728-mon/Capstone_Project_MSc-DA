@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}AT-RISK{% endblock %}</title>
+    <link
+      rel="manifest"
+      href="{{ url_for('static', filename='manifest.json') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css', v='3') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="{{ url_for('home') }}" class="brand">
+          <span class="brand-mark"
+            ><i class="fa-solid fa-shield-heart"></i
+          ></span>
+          <span>AT<span class="brand-accent">·</span>RISK</span>
+        </a>
+        <div class="nav-links">
+          <a href="{{ url_for('home') }}">Overview</a>
+          <a href="{{ url_for('about') }}">How it works</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          {% if session.get("logged_in") and session.get("role") == "user" %}
+          <a href="{{ url_for('user_dashboard') }}">Workspace</a>
+          <a href="{{ url_for('my_records') }}">
+            <i class="fa-solid fa-clock-rotate-left"></i> Your History
+          </a>
+          <a href="{{ url_for('assistant') }}">
+            <i class="fa-solid fa-sparkles"></i> AI Assistant
+          </a>
+          {% elif session.get("logged_in") and session.get("role") == "admin" %}
+          <a href="{{ url_for('admin_dashboard') }}">
+            <i class="fa-solid fa-chart-line"></i> Dashboard
+          </a>
+          <a href="{{ url_for('admin_submissions') }}">
+            <i class="fa-solid fa-table-list"></i> View Feedback
+          </a>
+          <a href="{{ url_for('admin_inbox') }}">
+            <i class="fa-solid fa-inbox"></i> Inbox {% if unread_messages
+            %}<span class="nav-count">{{ unread_messages }}</span>{% endif %}
+          </a>
+          {% endif %}
+        </div>
+        <div class="nav-actions">
+          {% if session.get("logged_in") %}
+          <a
+            class="icon-link"
+            href="{{ url_for('admin_settings' if session.get('role') == 'admin' else 'settings') }}"
+          >
+            <i class="fa-solid fa-sliders"></i>
+            {% if unread_messages %}<span class="notification-dot"
+              >{{ unread_messages }}</span
+            >{% endif %}
+          </a>
+          <a
+            href="{{ url_for('admin_profile' if session.get('role') == 'admin' else 'profile') }}"
+            class="avatar-link"
+          >
+            <span class="avatar"
+              >{{ (session.get('username', 'U')[0])|upper }}</span
+            >
+            <span class="hide-mobile"
+              >{{ session.get('username', 'Account') }}</span
+            >
+          </a>
+          <a href="{{ url_for('logout') }}" class="btn btn-small btn-ghost"
+            >Sign out</a
+          >
+          {% else %}
+          <a href="{{ url_for('login') }}" class="btn btn-small">Sign in</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    <main class="page-container">{% block content %}{% endblock %}</main>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("{{ url_for('static', filename='service-worker.js') }}")
+            .catch(() => {});
+        });
+      }
+    </script>
+    {% if session.get("logged_in") and session.get("role") == "user" %}
+    <div class="floating-ai" id="floatingAi">
+      <button
+        class="ai-launcher"
+        id="aiLauncher"
+        aria-label="Open AI assistant"
+      >
+        <span class="ai-cloud">☁</span>
+        <span class="ai-spark">✦</span>
+      </button>
+      <div class="ai-popover" id="aiPopover">
+        <div class="ai-popover-head">
+          <span class="ai-mini-icon"><i class="fa-solid fa-sparkles"></i></span>
+          <div>
+            <strong>AT-RISK assistant</strong
+            ><small>Here when you need clarity</small>
+          </div>
+          <button id="aiClose" aria-label="Close assistant">×</button>
+        </div>
+        <div class="ai-popover-body">
+          <div class="ai-mini-message">
+            Hi {{ session.get('username', 'there') }}. Need help filling
+            feedback or understanding next steps?
+          </div>
+          <div class="ai-quick-actions">
+            <a href="{{ url_for('assistant') }}">Help me fill feedback</a>
+            <a href="{{ url_for('assistant') }}">Explain my result</a>
+          </div>
+        </div>
+        <a class="ai-open-link" href="{{ url_for('assistant') }}">
+          Open full assistant <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/chat_widget.js') }}"></script>
+    {% endif %}
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>
+          <strong>AT<span class="brand-accent">·</span>RISK</strong
+          ><span class="muted">
+            · Assistive technology support intelligence</span
+          >
+        </div>
+        <span>© 2026 · Designed for clarity, care and follow-up</span>
+      </div>
+    </footer>
+  </body>
+</html>

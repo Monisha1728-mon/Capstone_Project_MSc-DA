@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block title %}AT-RISK | Feedback Received{%
+endblock %} {% block content %}
+<section class="narrow-page">
+  <div class="panel submission-confirmation">
+    <div class="submission-icon">
+      <i class="fa-solid fa-check"></i>
+    </div>
+    <span class="section-kicker">Feedback submitted</span>
+    {% if not_applicable %}
+    <h1>Feedback received</h1>
+    <p>
+      Your information was saved. Because no assistive technology device was
+      received, an abandonment-risk prediction is not required for this entry.
+    </p>
+    <div class="pending-notice">
+      <i class="fa-solid fa-circle-info"></i>
+      <div>
+        <strong>Status: No prediction required</strong>
+        <small>Your entry is still available in Your History.</small>
+      </div>
+    </div>
+    {% else %}
+    <h1>Your feedback is waiting for review</h1>
+    <p>
+      Your feedback has been securely sent to the administrator review queue.
+      The administrator will review it and run the AI prediction before a risk
+      result becomes available.
+    </p>
+    <div class="pending-notice">
+      <i class="fa-solid fa-hourglass-half"></i>
+      <div>
+        <strong>Status: Pending administrator review</strong>
+        <small>No prediction or PDF report is available yet.</small>
+      </div>
+    </div>
+    {% endif %}
+    <div class="result-actions">
+      <a class="btn" href="{{ url_for('user_dashboard') }}">Go to workspace</a>
+      <a class="btn btn-secondary" href="{{ url_for('my_records') }}"
+        >Open Your History</a
+      >
+    </div>
+  </div>
+</section>
+{% endblock %}

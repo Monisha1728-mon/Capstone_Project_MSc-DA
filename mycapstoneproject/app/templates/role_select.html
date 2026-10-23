@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block title %}AT-RISK | Login{% endblock %} {%
+block content %}
+<section class="role-page">
+  <div class="role-header">
+    <span class="hero-badge">🔐 Secure Access</span>
+    <h1>Welcome to <span>AT-RISK</span></h1>
+    <p>Please select how you want to access the system.</p>
+  </div>
+  <div class="role-grid">
+    <!-- USER -->
+    <div class="role-card">
+      <div class="role-icon">👤</div>
+      <h2>User</h2>
+      <p>
+        Take the assistive technology feedback, view your risk result, get
+        recommendations and download your reviewed report.
+      </p>
+      <a href="{{ url_for('user_login') }}" class="btn">Continue as User →</a>
+    </div>
+    <!-- ADMIN -->
+    <div class="role-card">
+      <div class="role-icon">🛡️</div>
+      <h2>Admin</h2>
+      <p>
+        Access the administrative dashboard, view user records, analyse risk
+        trends and monitor feedback entries.
+      </p>
+      <a href="{{ url_for('admin_login') }}" class="btn">Continue as Admin →</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

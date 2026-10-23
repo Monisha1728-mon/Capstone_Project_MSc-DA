@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+<div class="card">
+  <h1>AT Abandonment Prediction</h1>
+  <p>Clinician / Rehabilitation Staff Login</p>
+  <form method="post">
+    <input name="username" placeholder="Username" required /><input
+      name="password"
+      type="password"
+      placeholder="Password"
+      required
+    /><button>Login</button>
+  </form>
+  <p><a href="{{ url_for('register') }}">Create account</a></p>
+</div>
+{% endblock %}

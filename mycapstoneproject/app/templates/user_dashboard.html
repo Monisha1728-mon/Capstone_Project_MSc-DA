@@ -1,0 +1,226 @@
+{% extends "base.html" %} {% block title %}AT-RISK | My Workspace{% endblock %}
+{% block content %}
+<section class="dashboard-page workspace-v2">
+  <div class="workspace-hero">
+    <div>
+      <span class="eyebrow"
+        ><span class="status-dot"></span> My support workspace</span
+      >
+      <h1>Hello, {{ session.get('username', 'there') }}.</h1>
+      <p>
+        Submit feedback, see where it is in the review process and keep your
+        support journey organised.
+      </p>
+    </div>
+    <a class="btn hero-action" href="{{ url_for('form') }}"
+      ><i class="fa-solid fa-plus"></i> Share new feedback</a
+    >
+  </div>
+
+  {% if records and records[0].status == "predicted" and records[0].user_message
+  %}
+  <div class="review-banner panel">
+    <span class="review-banner-icon"><i class="fa-solid fa-bell"></i></span>
+    <div>
+      <span class="section-kicker">Latest administrator update</span
+      ><strong>{{ records[0].user_message }}</strong
+      ><small
+        >Reviewed {{ records[0].reviewed_at or records[0].created_at }}</small
+      >
+    </div>
+    <a
+      class="text-link"
+      href="{{ url_for('user_record_detail', prediction_id=records[0].id) }}"
+      >View result <i class="fa-solid fa-arrow-right"></i
+    ></a>
+  </div>
+  {% endif %}
+
+  <div class="workspace-v2-grid">
+    <main>
+      <div class="workspace-stats">
+        <div class="workspace-stat stat-teal">
+          <span><i class="fa-solid fa-layer-group"></i></span>
+          <div>
+            <small>Total feedback</small><strong>{{ records|length }}</strong
+            ><em>All submitted entries</em>
+          </div>
+        </div>
+        <div class="workspace-stat stat-amber">
+          <span><i class="fa-solid fa-hourglass-half"></i></span>
+          <div>
+            <small>Waiting for review</small
+            ><strong
+              >{{ records|selectattr('status', 'equalto',
+              'submitted')|list|length }}</strong
+            ><em>Admin action pending</em>
+          </div>
+        </div>
+        <div class="workspace-stat stat-blue">
+          <span><i class="fa-solid fa-circle-check"></i></span>
+          <div>
+            <small>Reviewed</small
+            ><strong
+              >{{ records|selectattr('status', 'equalto',
+              'predicted')|list|length }}</strong
+            ><em>Results available</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel progress-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="section-kicker">Your journey</span>
+            <h2>Feedback to support</h2>
+          </div>
+          <span class="progress-caption"
+            >{{ 'Reviewed' if records and records[0].status == 'predicted' else
+            'In progress' }}</span
+          >
+        </div>
+        <div class="journey-steps">
+          <div class="journey-step complete">
+            <span>1</span>
+            <div>
+              <strong>Feedback shared</strong
+              ><small>Your experience is securely recorded.</small>
+            </div>
+          </div>
+          <div
+            class="journey-line {% if records and records[0].status == 'predicted' %}complete{% endif %}"
+          ></div>
+          <div
+            class="journey-step {% if records and records[0].status == 'predicted' %}complete{% else %}active{% endif %}"
+          >
+            <span>2</span>
+            <div>
+              <strong>Administrator review</strong
+              ><small
+                >{{ 'A result and explanation are ready.' if records and
+                records[0].status == 'predicted' else 'Your support team is
+                checking the entry.' }}</small
+              >
+            </div>
+          </div>
+          <div
+            class="journey-line {% if records and records[0].status == 'predicted' %}complete{% endif %}"
+          ></div>
+          <div
+            class="journey-step {% if records and records[0].status == 'predicted' %}complete{% else %}locked{% endif %}"
+          >
+            <span>3</span>
+            <div>
+              <strong>Next-step support</strong
+              ><small
+                >{{ 'Open your result to plan the next step.' if records and
+                records[0].status == 'predicted' else 'Available after review.'
+                }}</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel recent-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="section-kicker">Recent activity</span>
+            <h2>Your latest feedback</h2>
+          </div>
+          <a class="text-link" href="{{ url_for('my_records') }}"
+            >Open Your History <i class="fa-solid fa-arrow-right"></i
+          ></a>
+        </div>
+        {% if records %}
+        <div class="workspace-feed">
+          {% for record in records[:5] %}
+          <a
+            class="workspace-feed-row"
+            href="{{ url_for('user_record_detail', prediction_id=record.id) }}"
+          >
+            <span class="feed-index">{{ '%02d'|format(loop.index) }}</span>
+            <span class="feed-copy"
+              ><strong>Feedback #{{ '%04d'|format(record.id) }}</strong
+              ><small
+                >{{ record.created_at }} · {{ record.device_needed or 'Support
+                details submitted' }}</small
+              ></span
+            >
+            {% if record.status == 'predicted' %}<span
+              class="risk-pill risk-{{ record.risk|lower }}"
+              >{{ record.risk }} · {{ record.risk_score }}%</span
+            >{% elif record.status == 'not_applicable' %}<span
+              class="state-label"
+              >Not applicable</span
+            >{% else %}<span class="pending-pill"
+              ><i class="fa-solid fa-clock"></i> Pending</span
+            >{% endif %}
+            <i class="fa-solid fa-chevron-right feed-arrow"></i>
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="workspace-empty">
+          <span><i class="fa-solid fa-paper-plane"></i></span>
+          <div>
+            <h3>Your workspace is ready</h3>
+            <p>
+              Share your first feedback and the review journey will appear here.
+            </p>
+          </div>
+          <a class="btn btn-small" href="{{ url_for('form') }}">Start now</a>
+        </div>
+        {% endif %}
+      </div>
+    </main>
+
+    <aside class="workspace-v2-side">
+      <div class="panel action-stack">
+        <span class="section-kicker">Quick actions</span>
+        <h2>What do you need?</h2>
+        <a class="action-tile teal-tile" href="{{ url_for('form') }}"
+          ><span><i class="fa-solid fa-pen-to-square"></i></span>
+          <div>
+            <strong>Share feedback</strong
+            ><small>Tell us about your device and support.</small>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i></a
+        ><a class="action-tile purple-tile" href="{{ url_for('assistant') }}"
+          ><span><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+          <div>
+            <strong>Ask the AI helper</strong
+            ><small>Get friendly help with any question.</small>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i></a
+        ><a class="action-tile blue-tile" href="{{ url_for('my_records') }}"
+          ><span><i class="fa-solid fa-clock-rotate-left"></i></span>
+          <div>
+            <strong>View Your History</strong
+            ><small>See every submission and status.</small>
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i
+        ></a>
+      </div>
+      <div class="workspace-tip">
+        <span><i class="fa-solid fa-lightbulb"></i></span>
+        <div>
+          <strong>Small tip</strong>
+          <p>
+            Be honest about device condition, training and barriers. Clear
+            feedback helps the administrator suggest better support.
+          </p>
+        </div>
+      </div>
+      <div class="panel human-support">
+        <span class="support-orb"><i class="fa-solid fa-headset"></i></span>
+        <h3>Need a person?</h3>
+        <p>Send a message and it will appear in the administrator inbox.</p>
+        <a class="text-link" href="{{ url_for('contact') }}"
+          >Contact support <i class="fa-solid fa-arrow-right"></i
+        ></a>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}
