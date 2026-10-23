@@ -1,0 +1,357 @@
+my projects link
+
+spotify app like link 
+
+https://vercel.com/monisha1728-mons-projects/monisha1728-mon-soundwave-xd1h/92hrFeaMpTKBqnahxKsz5MeioUD8 
+
+cmd prompt 
+
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\lovem\Downloads\soundwave> dir
+
+
+    Directory: C:\Users\lovem\Downloads\soundwave
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        05-05-2026     12:44                node_modules
+d-----        05-05-2026     12:35                public
+d-----        05-05-2026     12:46                src
+-a----        05-05-2026     12:35            310 .gitignore
+-a----        05-05-2026     12:44         688788 package-lock.json
+-a----        05-05-2026     12:36            961 package.json
+-a----        05-05-2026     12:35           3359 README.md
+
+
+PS C:\Users\lovem\Downloads\soundwave> git init
+Reinitialized existing Git repository in C:/Users/lovem/Downloads/soundwave/.git/
+PS C:\Users\lovem\Downloads\soundwave> git add .
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/App.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/App.js', LF will be replaced by CRLF the next time Git touches it
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "SoundWave music app"
+[master afaa4b8] SoundWave music app
+ 12 files changed, 2173 insertions(+), 45 deletions(-)
+ create mode 100644 src/components/MainContent.js
+ create mode 100644 src/components/PlayerBar.js
+ create mode 100644 src/components/Sidebar.js
+ create mode 100644 src/components/SongRow.js
+ create mode 100644 src/components/TopBar.js
+ create mode 100644 src/context/PlayerContext.js
+ create mode 100644 src/firebase/seedSongs.js
+ create mode 100644 src/hooks/useSongs.js
+PS C:\Users\lovem\Downloads\soundwave> git branch -M main
+PS C:\Users\lovem\Downloads\soundwave> git remote add origin https://github.com/Monisha1728-mon/soundwave.git
+PS C:\Users\lovem\Downloads\soundwave> git push -u origin main
+info: please complete authentication in your browser...
+Enumerating objects: 41, done.
+Counting objects: 100% (41/41), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (38/38), done.
+Writing objects: 100% (41/41), 192.19 KiB | 6.20 MiB/s, done.
+Total 41 (delta 4), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (4/4), done.
+To https://github.com/Monisha1728-mon/soundwave.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+PS C:\Users\lovem\Downloads\soundwave> git add .
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "fix: set node version to 18"
+[main 77fbe6f] fix: set node version to 18
+ 1 file changed, 4 insertions(+)
+PS C:\Users\lovem\Downloads\soundwave> git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 333 bytes | 333.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/Monisha1728-mon/soundwave.git
+   afaa4b8..77fbe6f  main -> main
+PS C:\Users\lovem\Downloads\soundwave> git add .
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "fix: set node version to 18"
+[main 7cf0e8f] fix: set node version to 18
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+PS C:\Users\lovem\Downloads\soundwave> git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 320 bytes | 320.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/Monisha1728-mon/soundwave.git
+   77fbe6f..7cf0e8f  main -> main
+PS C:\Users\lovem\Downloads\soundwave> git add .
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "fix: set node version to 18"
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+PS C:\Users\lovem\Downloads\soundwave> git push
+Everything up-to-date
+PS C:\Users\lovem\Downloads\soundwave> git add .
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "fix: set node version to 18"
+[main 99f29b6] fix: set node version to 18
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+PS C:\Users\lovem\Downloads\soundwave> git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 317 bytes | 317.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/Monisha1728-mon/soundwave.git
+   7cf0e8f..99f29b6  main -> main
+PS C:\Users\lovem\Downloads\soundwave> git add .
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "fix: clean package.json + react 18"
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+PS C:\Users\lovem\Downloads\soundwave> git push
+Everything up-to-date
+PS C:\Users\lovem\Downloads\soundwave> git add .
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "fix: clean package.json final"
+[main 3192117] fix: clean package.json final
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+PS C:\Users\lovem\Downloads\soundwave> git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 799 bytes | 799.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/Monisha1728-mon/soundwave.git
+   99f29b6..3192117  main -> main
+PS C:\Users\lovem\Downloads\soundwave> git init
+Reinitialized existing Git repository in C:/Users/lovem/Downloads/soundwave/.git/
+PS C:\Users\lovem\Downloads\soundwave> git add .
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "fresh clean upload"
+On branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+PS C:\Users\lovem\Downloads\soundwave> git branch -M main
+PS C:\Users\lovem\Downloads\soundwave> git remote add origin https://github.com/Monisha1728-mon/soundwave.git
+error: remote origin already exists.
+PS C:\Users\lovem\Downloads\soundwave> git remote remove origin
+PS C:\Users\lovem\Downloads\soundwave> git remote add origin https://github.com/Monisha1728-mon/soundwave.git
+PS C:\Users\lovem\Downloads\soundwave> git push -u origin main --force^B
+error: unknown option `force?'
+usage: git push [<options>] [<repository> [<refspec>...]]
+
+    -v, --[no-]verbose    be more verbose
+    -q, --[no-]quiet      be more quiet
+    --[no-]repo <repository>
+                          repository
+    --[no-]all            push all branches
+    --[no-]branches       alias of --all
+    --[no-]mirror         mirror all refs
+    -d, --[no-]delete     delete refs
+    --[no-]tags           push tags (can't be used with --all or --branches or --mirror)
+    -n, --[no-]dry-run    dry run
+    --[no-]porcelain      machine-readable output
+    -f, --[no-]force      force updates
+    --[no-]force-with-lease[=<refname>:<expect>]
+                          require old value of ref to be at this value
+    --[no-]force-if-includes
+                          require remote updates to be integrated locally
+    --[no-]recurse-submodules (check|on-demand|no)
+                          control recursive pushing of submodules
+    --[no-]thin           use thin pack
+    --[no-]receive-pack <receive-pack>
+                          receive pack program
+    --[no-]exec <receive-pack>
+                          receive pack program
+    -u, --[no-]set-upstream
+                          set upstream for git pull/status
+    --[no-]progress       force progress reporting
+    --[no-]prune          prune locally removed refs
+    --no-verify           bypass pre-push hook
+    --verify              opposite of --no-verify
+    --[no-]follow-tags    push missing but relevant tags
+    --[no-]signed[=(yes|no|if-asked)]
+                          GPG sign the push
+    --[no-]atomic         request atomic transaction on remote side
+    -o, --[no-]push-option <server-specific>
+                          option to transmit
+    -4, --ipv4            use IPv4 addresses only
+    -6, --ipv6            use IPv6 addresses only
+
+PS C:\Users\lovem\Downloads\soundwave> git init
+Reinitialized existing Git repository in C:/Users/lovem/Downloads/soundwave/.git/
+PS C:\Users\lovem\Downloads\soundwave> git add .
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "upload soundwave project"
+On branch main
+nothing to commit, working tree clean
+PS C:\Users\lovem\Downloads\soundwave> git branch -M main
+PS C:\Users\lovem\Downloads\soundwave> git remote remove origin
+PS C:\Users\lovem\Downloads\soundwave> git remote add origin https://github.com/Monisha1728-mon/soundwave.git
+PS C:\Users\lovem\Downloads\soundwave> git push -u origin main --force
+Enumerating objects: 53, done.
+Counting objects: 100% (53/53), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (50/50), done.
+Writing objects: 100% (53/53), 193.65 KiB | 5.87 MiB/s, done.
+Total 53 (delta 11), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (11/11), done.
+To https://github.com/Monisha1728-mon/soundwave.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+PS C:\Users\lovem\Downloads\soundwave> del package.json
+del : Cannot find path 'C:\Users\lovem\Downloads\soundwave\package.json'
+because it does not exist.
+At line:1 char:1
++ del package.json
++ ~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\lovem\...ve\packag
+   e.json:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.R
+   emoveItemCommand
+
+PS C:\Users\lovem\Downloads\soundwave> echo {> package.json
+>>
+>> ^C
+PS C:\Users\lovem\Downloads\soundwave> git add .
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "add clean package.json"
+[main 72ccbf5] add clean package.json
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+PS C:\Users\lovem\Downloads\soundwave> git push --force
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 476 bytes | 476.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/Monisha1728-mon/soundwave.git
+   3192117..72ccbf5  main -> main
+PS C:\Users\lovem\Downloads\soundwave>
+
+------------------------------
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\lovem> cd C:\Users\lovem\Downloads\soundwave
+PS C:\Users\lovem\Downloads\soundwave> rmdir /s /q .git
+Remove-Item : A positional parameter cannot be found that accepts argument
+'/q'.
+At line:1 char:1
++ rmdir /s /q .git
++ ~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Remove-Item], Paramete
+   rBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Microsoft.PowerS
+   hell.Commands.RemoveItemCommand
+
+PS C:\Users\lovem\Downloads\soundwave> Remove-Item -Recurse -Force .git
+PS C:\Users\lovem\Downloads\soundwave> git init
+Initialized empty Git repository in C:/Users/lovem/Downloads/soundwave/.git/
+PS C:\Users\lovem\Downloads\soundwave> git add .
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'README.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/index.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/manifest.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'public/robots.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/App.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/App.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/App.test.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/index.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/index.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/reportWebVitals.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/setupTests.js', LF will be replaced by CRLF the next time Git touches it
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "clean fresh project"
+[master (root-commit) 0836982] clean fresh project
+ 26 files changed, 19749 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 README.md
+ create mode 100644 package-lock.json
+ create mode 100644 package.json
+ create mode 100644 public/favicon.ico
+ create mode 100644 public/index.html
+ create mode 100644 public/logo192.png
+ create mode 100644 public/logo512.png
+ create mode 100644 public/manifest.json
+ create mode 100644 public/robots.txt
+ create mode 100644 src/App.css
+ create mode 100644 src/App.js
+ create mode 100644 src/App.test.js
+ create mode 100644 src/components/MainContent.js
+ create mode 100644 src/components/PlayerBar.js
+ create mode 100644 src/components/Sidebar.js
+ create mode 100644 src/components/SongRow.js
+ create mode 100644 src/components/TopBar.js
+ create mode 100644 src/context/PlayerContext.js
+ create mode 100644 src/firebase/seedSongs.js
+ create mode 100644 src/hooks/useSongs.js
+ create mode 100644 src/index.css
+ create mode 100644 src/index.js
+ create mode 100644 src/logo.svg
+ create mode 100644 src/reportWebVitals.js
+ create mode 100644 src/setupTests.js
+PS C:\Users\lovem\Downloads\soundwave> git branch -M main
+PS C:\Users\lovem\Downloads\soundwave> git remote add origin https://github.com/Monisha1728-mon/soundwave-clean.git
+PS C:\Users\lovem\Downloads\soundwave> git push -u origin main
+Enumerating objects: 34, done.
+Counting objects: 100% (34/34), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (31/31), done.
+Writing objects: 100% (34/34), 190.91 KiB | 6.36 MiB/s, done.
+Total 34 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Monisha1728-mon/soundwave-clean.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+PS C:\Users\lovem\Downloads\soundwave> git add .
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "fix: update node to 24"
+[main e12aa22] fix: update node to 24
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+PS C:\Users\lovem\Downloads\soundwave> git push
+Enumerating objects: 5, done.
+Counting objects: 100% (5/5), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 298 bytes | 298.00 KiB/s, done.
+Total 3 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/Monisha1728-mon/soundwave-clean.git
+   0836982..e12aa22  main -> main
+PS C:\Users\lovem\Downloads\soundwave> git add .
+PS C:\Users\lovem\Downloads\soundwave> git commit -m "force node 24 via vercel config"
+[main 40e25c6] force node 24 via vercel config
+ 1 file changed, 7 insertions(+)
+ create mode 100644 vercel.json
+PS C:\Users\lovem\Downloads\soundwave> git push --force
+Enumerating objects: 4, done.
+Counting objects: 100% (4/4), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 336 bytes | 336.00 KiB/s, done.
+Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/Monisha1728-mon/soundwave-clean.git
+   e12aa22..40e25c6  main -> main
+PS C:\Users\lovem\Downloads\soundwave>
+---------------------------------------------
+
+  
+
+    https://examinationservices.nic.in/ExamSys26Part2/Registration/frmRegistration.aspx 
+
+
+Application Number : 265610099870
